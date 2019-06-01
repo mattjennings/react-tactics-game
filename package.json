@@ -1,0 +1,41 @@
+{
+  "name": "react-pixi-tiled",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "3.0.1",
+    "prop-types": "^15.7.2",
+    "@inlet/react-pixi": "^0.5.9",
+    "pixi-tiledmap": "^1.10.0",
+    "pixi-viewport": "^3.23.2",
+    "pixi.js": "^4.8.7",
+    "tiled-to-pixi": "^1.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "prettier": "^1.14.3"
+  }
+}
