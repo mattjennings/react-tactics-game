@@ -1,6 +1,4 @@
-# react-pixi-tiled
-
-A test project to try out react-pixi with tiled maps using Tiled
+# react-tactics-game
 
 ## Install
 
@@ -11,5 +9,5 @@ yarn
 ## Start
 
 ```
-yarn dev
+yarn start
 ```
