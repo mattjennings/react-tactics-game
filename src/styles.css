@@ -11,8 +11,6 @@ body {
 }
 
 canvas {
-  height: auto;
-  width: 100vw;
   margin: auto;
   position: absolute;
   top: 0;
@@ -20,4 +18,18 @@ canvas {
   right: 0;
   bottom: 0;
   image-rendering: pixelated;
+}
+
+@media (orientation: landscape) {
+  canvas {
+    height: 100vh;
+    width: auto;
+  }
+}
+
+@media (orientation: portrait) {
+  canvas {
+    height: auto;
+    width: 100vw;
+  }
 }
