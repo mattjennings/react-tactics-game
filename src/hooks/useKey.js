@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { useTick } from '@inlet/react-pixi'
-import useMergingState from './useMergingState'
+import useSetState from './useSetState'
 
 export default function useKey(keyCode) {
-  const [state, setState] = useMergingState({ isDown: false, isUp: false, isPressed: false, isReleased: false })
+  const [state, setState] = useSetState({ isDown: false, isUp: false, isPressed: false, isReleased: false })
 
   useTick(() => {
     if (state.isPressed || state.isReleased) {

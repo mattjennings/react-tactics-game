@@ -1,15 +1,7 @@
-import { PixiComponent } from '@inlet/react-pixi'
+import { PixiComponent, useApp } from '@inlet/react-pixi'
 import Viewport from 'pixi-viewport'
 import React, { useRef } from 'react'
-
-// export interface CameraProps {
-//   cameraRef?: React.RefObject<Viewport>
-//   width: number
-//   height: number
-//   worldWidth: number
-//   worldHeight: number
-//   children?: JSX.Element
-// }
+import clamp from '../util/clamp'
 
 const CameraComponent = PixiComponent('Camera', {
   create: props => {
@@ -27,29 +19,29 @@ const CameraComponent = PixiComponent('Camera', {
   }
 })
 
-// interface CameraContextValue {
-//   camera?: { current?: Viewport }
-//   moveCamera: (x: number, y: number) => any
-// }
-
 export const CameraContext = React.createContext({
   moveCamera: () => {}
 })
 
 export default function Camera({ children, ...props }) {
   const camera = useRef(null)
+  const app = useApp()
 
+  console.log(app.stage._bounds)
   function moveCamera({ x, y }) {
     if (camera.current) {
+      const newCenterX = x !== undefined ? x : camera.current.center.x
+      const newCenterY = y !== undefined ? y : camera.current.center.y
+
       camera.current.moveCenter(
-        x !== undefined ? x : camera.current.center.x,
-        y !== undefined ? y : camera.current.center.y
+        clamp(camera.current.screenWidth / 2, newCenterX, app.stage.width - camera.current.screenWidth / 2),
+        clamp(camera.current.screenHeight / 2, newCenterY, app.stage.height - camera.current.screenHeight / 2)
       )
     }
   }
 
   return (
-    <CameraComponent {...props} ref={camera}>
+    <CameraComponent width={app.view.width} height={app.view.height} {...props} ref={camera}>
       <CameraContext.Provider value={{ camera, moveCamera }}>{children}</CameraContext.Provider>
     </CameraComponent>
   )

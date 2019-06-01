@@ -1,8 +1,11 @@
 import { Sprite, useTick } from '@inlet/react-pixi'
-import React, { useReducer } from 'react'
-import useMergingState from '../hooks/useMergingState'
+import React, { useReducer, useContext, useEffect } from 'react'
 import useSpritesheet from '../hooks/useSpritesheet'
 import useKey from '../hooks/useKey'
+import { CameraContext } from './Camera'
+import usePosition from '../hooks/usePosition'
+
+const WALKING_SPEED = 2
 
 const Player = ({ startingPosition }) => {
   const leftKey = useKey(65) // A
@@ -10,13 +13,19 @@ const Player = ({ startingPosition }) => {
   const downKey = useKey(87) // S
   const upKey = useKey(83) // W
 
+  const { moveCamera } = useContext(CameraContext)
   const [anim, dispatchAnim] = useReducer(reducer, {
     fps: 0,
     frame: 0,
     facing: 1
   })
 
-  const [pos, setPos] = useMergingState(startingPosition)
+  const [pos, setPos] = usePosition(startingPosition, { limitBounds: true })
+
+  // set initial camera position
+  useEffect(() => {
+    moveCamera(pos)
+  }, [])
 
   const sprites = useSpritesheet({
     spritesheet: '/assets/rpg-pack/chars/gabe/gabe-idle-run.png',
@@ -46,19 +55,19 @@ const Player = ({ startingPosition }) => {
     let velocity = { x: 0, y: 0 }
 
     if (leftKey.isDown) {
-      velocity.x -= 2
+      velocity.x -= WALKING_SPEED
     }
 
     if (rightKey.isDown) {
-      velocity.x += 2
+      velocity.x += WALKING_SPEED
     }
 
     if (upKey.isDown) {
-      velocity.y += 2
+      velocity.y += WALKING_SPEED
     }
 
     if (downKey.isDown) {
-      velocity.y -= 2
+      velocity.y -= WALKING_SPEED
     }
 
     if (velocity.x || velocity.y) {
@@ -66,6 +75,7 @@ const Player = ({ startingPosition }) => {
       const facing = velocity.x ? Math.sign(newPos.x - pos.x) : anim.facing
 
       setPos(newPos)
+      moveCamera({ ...pos, ...newPos })
       dispatchAnim({ type: 'START_WALK', payload: { facing } })
     }
 
