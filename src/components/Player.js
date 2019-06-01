@@ -25,6 +25,7 @@ const Player = ({ startingPosition }) => {
   // set initial camera position
   useEffect(() => {
     moveCamera(pos)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const sprites = useSpritesheet({

@@ -27,7 +27,6 @@ export default function Camera({ children, ...props }) {
   const camera = useRef(null)
   const app = useApp()
 
-  console.log(app.stage._bounds)
   function moveCamera({ x, y }) {
     if (camera.current) {
       const newCenterX = x !== undefined ? x : camera.current.center.x
