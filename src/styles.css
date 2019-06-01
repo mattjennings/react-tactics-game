@@ -11,8 +11,8 @@ body {
 }
 
 canvas {
-  height: 100%;
-  width: auto;
+  height: auto;
+  width: 100vw;
   margin: auto;
   position: absolute;
   top: 0;
