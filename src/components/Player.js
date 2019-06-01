@@ -2,7 +2,6 @@ import { Sprite, useTick } from '@inlet/react-pixi'
 import React, { useReducer } from 'react'
 import useMergingState from '../hooks/useMergingState'
 import useSpritesheet from '../hooks/useSpritesheet'
-import Input from './Input'
 import useKey from '../hooks/useKey'
 
 const Player = ({ startingPosition }) => {
