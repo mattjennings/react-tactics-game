@@ -3,8 +3,14 @@ import React, { useReducer } from 'react'
 import useMergingState from '../hooks/useMergingState'
 import useSpritesheet from '../hooks/useSpritesheet'
 import Input from './Input'
+import useKey from '../hooks/useKey'
 
 const Player = ({ startingPosition }) => {
+  const leftKey = useKey(65) // A
+  const rightKey = useKey(68) // D
+  const downKey = useKey(87) // S
+  const upKey = useKey(83) // W
+
   const [anim, dispatchAnim] = useReducer(reducer, {
     fps: 0,
     frame: 0,
@@ -19,8 +25,12 @@ const Player = ({ startingPosition }) => {
     frameHeight: 24
   })
 
+  // Handle animation updating (keep this above other useTicks)
   useTick(delta => {
-    let nextFrame = ((anim.frame + anim.fps) * delta) % (sprites.length + 1)
+    if (!anim.fps) {
+      return
+    }
+    let nextFrame = (anim.frame + delta * anim.fps) % (sprites.length + 1)
 
     // loop starts on first frame
     if (nextFrame >= sprites.length) {
@@ -32,6 +42,30 @@ const Player = ({ startingPosition }) => {
     }
   })
 
+  // Handle controls
+  useTick(delta => {
+    if (leftKey.isDown) {
+      walk({ x: pos.x - 2 })
+    }
+
+    if (rightKey.isDown) {
+      walk({ x: pos.x + 2 })
+    }
+
+    if (upKey.isDown) {
+      walk({ y: pos.y + 2 })
+    }
+
+    if (downKey.isDown) {
+      walk({ y: pos.y - 2 })
+    }
+
+    const stoppedWalking = isWalking(anim) && !leftKey.isDown && !rightKey.isDown && !upKey.isDown && !downKey.isDown
+    if (stoppedWalking) {
+      dispatchAnim({ type: 'IDLE' })
+    }
+  })
+
   function walk(newPos) {
     setPos(newPos)
 
@@ -40,29 +74,14 @@ const Player = ({ startingPosition }) => {
     dispatchAnim({ type: 'START_WALK', payload: { facing } })
   }
 
-  function idle() {
-    dispatchAnim({ type: 'IDLE' })
-  }
-
   return (
-    <>
-      {/* D */}
-      <Input keyCode={68} onDown={() => walk({ x: pos.x + 2 })} onRelease={idle} />
-      {/* A */}
-      <Input keyCode={65} onDown={() => walk({ x: pos.x - 2 })} onRelease={idle} />
-      {/* W */}
-      <Input keyCode={87} onDown={() => walk({ y: pos.y - 2 })} onRelease={idle} />
-      {/* S */}
-      <Input keyCode={83} onDown={() => walk({ y: pos.y + 2 })} onRelease={idle} />
-
-      <Sprite
-        texture={sprites[Math.floor(anim.frame)]}
-        x={pos.x}
-        y={pos.y}
-        pivot={[12, 0]}
-        scale={{ x: anim.facing, y: 1 }}
-      />
-    </>
+    <Sprite
+      texture={sprites[Math.floor(anim.frame)]}
+      x={pos.x}
+      y={pos.y}
+      pivot={[12, 0]}
+      scale={{ x: anim.facing, y: 1 }}
+    />
   )
 }
 
@@ -76,7 +95,7 @@ function reducer(state, action) {
 
       return {
         ...state,
-        fps: 0.1,
+        fps: 0.2,
         frame: 1,
         facing
       }
