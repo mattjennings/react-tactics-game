@@ -43,35 +43,37 @@ const Player = ({ startingPosition }) => {
 
   // Handle controls
   useTick(delta => {
+    let velocity = { x: 0, y: 0 }
+
     if (leftKey.isDown) {
-      walk({ x: pos.x - 2 })
+      velocity.x -= 2
     }
 
     if (rightKey.isDown) {
-      walk({ x: pos.x + 2 })
+      velocity.x += 2
     }
 
     if (upKey.isDown) {
-      walk({ y: pos.y + 2 })
+      velocity.y += 2
     }
 
     if (downKey.isDown) {
-      walk({ y: pos.y - 2 })
+      velocity.y -= 2
     }
 
-    const stoppedWalking = isWalking(anim) && !leftKey.isDown && !rightKey.isDown && !upKey.isDown && !downKey.isDown
+    if (velocity.x || velocity.y) {
+      const newPos = { x: pos.x + velocity.x, y: pos.y + velocity.y }
+      const facing = velocity.x ? Math.sign(newPos.x - pos.x) : anim.facing
+
+      setPos(newPos)
+      dispatchAnim({ type: 'START_WALK', payload: { facing } })
+    }
+
+    const stoppedWalking = !leftKey.isDown && !rightKey.isDown && !upKey.isDown && !downKey.isDown
     if (stoppedWalking) {
       dispatchAnim({ type: 'IDLE' })
     }
   })
-
-  function walk(newPos) {
-    setPos(newPos)
-
-    const facing = newPos.x !== undefined ? Math.sign(newPos.x - pos.x) : anim.facing
-
-    dispatchAnim({ type: 'START_WALK', payload: { facing } })
-  }
 
   return (
     <Sprite

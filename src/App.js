@@ -11,7 +11,7 @@ const App = () => (
       fallback={<Text text="Loading..." style={{ fill: 'white' }} x={0} y={0} />}
     >
       <Tilemap tilemapUrl="/assets/tilemaps/level1.tmx" />
-      <Player startingPosition={{ x: 100, y: 100 }} />
+      <Player startingPosition={{ x: 250, y: 250 }} />
     </LoadResources>
   </Stage>
 )
