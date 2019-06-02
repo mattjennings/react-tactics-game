@@ -76,7 +76,7 @@ const Player = ({ startingPosition }) => {
 
   return (
     <Container>
-      <Sprite texture={sprite} x={pos.x} y={pos.y} pivot={bounds.pivot} scale={{ x: facing, y: 1 }} />
+      <Sprite texture={sprite} x={pos.x} y={pos.y} pivot={bounds.pivot} scale={{ x: facing, y: 1 }} zIndex={-9999} />
 
       {/* <CollisionDebug position={pos} bounds={bounds} /> */}
     </Container>

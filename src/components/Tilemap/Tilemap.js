@@ -1,6 +1,6 @@
-import { PixiComponent } from '@inlet/react-pixi'
+import { PixiComponent, Container } from '@inlet/react-pixi'
 import * as PIXI from 'pixi.js'
-import React, { useMemo, useCallback } from 'react'
+import React, { useMemo, useCallback, useEffect } from 'react'
 import getCollisionBounds from '../../util/getCollisionBounds'
 
 export const TilemapContext = React.createContext({ tilemap: null })
@@ -14,21 +14,36 @@ const PixiTilemap = PixiComponent('Tilemap', {
   }
 })
 
-const Tilemap = props => {
+const Tilemap = ({ children, tilemapUrl, ...props }) => {
   // create tilemap from url
-  const tilemap = useMemo(() => new PIXI.extras.TiledMap(props.tilemapUrl), [props.tilemapUrl])
+  const tilemap = useMemo(() => new PIXI.extras.TiledMap(tilemapUrl), [tilemapUrl])
+
+  // Put the rendered children next to the REACT_CHILDREN layer in the tilemap
+  useEffect(() => {
+    const reactChildrenLayerIndex = tilemap.children.findIndex(child => child.name === 'REACT_CHILDREN')
+    const renderLayerIndex = tilemap.children.findIndex(child => child.name === 'RENDER')
+
+    arrayMove(tilemap.children, renderLayerIndex, reactChildrenLayerIndex)
+  }, [tilemap])
 
   // Create a Map of collision enabled tiles with keys of "x, y"
   const collisionTiles = useMemo(() => {
-    const layers = tilemap.layers.filter(layer => layer.properties.collision)
+    const { layers } = tilemap
     const tiles = new Map()
-    layers.forEach(layer => {
-      layer.tiles.filter(tile => tile.tile).map(tile => tiles.set(`${tile.x}, ${tile.y}`, tile))
+    layers.forEach((layer, index) => {
+      if (layer.tiles) {
+        layer.tiles
+          .filter(tile => tile.tile && (layer.properties.collision || tile.properties.collision))
+          .map(tile => tiles.set(`${tile.x}, ${tile.y}`, tile))
+      }
     })
 
     return tiles
   }, [tilemap])
 
+  /**
+   * Check if a tile with enabled collision exists at the given point
+   */
   const getCollisionTile = useCallback(
     ({ x, y }) => {
       const { tileWidth, tileHeight } = tilemap
@@ -41,6 +56,10 @@ const Tilemap = props => {
     [collisionTiles, tilemap]
   )
 
+  /**
+   * Attempts to move to the position if there is no tile with collision enabled.
+   * If there is, it will return the closest available position to that tile.
+   */
   const checkMove = useCallback(
     (from, to, bounds) => {
       const { pivot = [0, 0] } = bounds
@@ -123,9 +142,17 @@ const Tilemap = props => {
 
   return (
     <TilemapContext.Provider value={value}>
-      <PixiTilemap {...props} tilemap={tilemap} />
+      <PixiTilemap {...props} tilemap={tilemap}>
+        <Container name="RENDER">{children}</Container>
+      </PixiTilemap>
     </TilemapContext.Provider>
   )
+}
+
+function arrayMove(arr, fromIndex, toIndex) {
+  var element = arr[fromIndex]
+  arr.splice(fromIndex, 1)
+  arr.splice(toIndex, 0, element)
 }
 
 export default Tilemap
