@@ -85,7 +85,7 @@ const Player = ({ startingPosition }) => {
         scale={{ x: facing, y: 1 }}
       />
 
-      {true && <CollisionDebug position={pos} bounds={bounds} />}
+      {false && <CollisionDebug position={pos} bounds={bounds} />}
     </Container>
   )
 }
