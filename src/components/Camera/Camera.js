@@ -33,8 +33,10 @@ export default function Camera({ children, ...props }) {
       const newCenterY = y !== undefined ? y : camera.current.center.y
 
       camera.current.moveCenter(
-        clamp(camera.current.screenWidth / 2, newCenterX, app.stage.width - camera.current.screenWidth / 2),
-        clamp(camera.current.screenHeight / 2, newCenterY, app.stage.height - camera.current.screenHeight / 2)
+        Math.round(clamp(camera.current.screenWidth / 2, newCenterX, app.stage.width - camera.current.screenWidth / 2)),
+        Math.round(
+          clamp(camera.current.screenHeight / 2, newCenterY, app.stage.height - camera.current.screenHeight / 2)
+        )
       )
     }
   }

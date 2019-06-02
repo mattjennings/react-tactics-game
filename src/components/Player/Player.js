@@ -5,7 +5,7 @@ import usePosition from '../../hooks/usePosition'
 import { useCamera } from '../Camera'
 import usePlayerAnimation from './usePlayerAnimation'
 
-const WALKING_SPEED = 2
+const WALKING_SPEED = 1.8
 
 const bounds = {
   width: 24,
@@ -54,7 +54,7 @@ const Player = ({ startingPosition }) => {
 
     if (velocity.x || velocity.y) {
       // the position that we want to move to before we collision check
-      const desiredPos = { x: Math.round(pos.x + velocity.x * delta), y: Math.round(pos.y + velocity.y * delta) }
+      const desiredPos = { x: pos.x + velocity.x * delta, y: pos.y + velocity.y * delta }
 
       // get new direction based on desiredPos (if we walk left and hit a wall, we still want to face left)
       const newFacing = velocity.x ? Math.sign(desiredPos.x - pos.x) : facing
@@ -76,7 +76,14 @@ const Player = ({ startingPosition }) => {
 
   return (
     <Container>
-      <Sprite texture={sprite} x={pos.x} y={pos.y} pivot={bounds.pivot} scale={{ x: facing, y: 1 }} zIndex={-9999} />
+      <Sprite
+        texture={sprite}
+        x={Math.round(pos.x)}
+        y={Math.round(pos.y)}
+        pivot={bounds.pivot}
+        scale={{ x: facing, y: 1 }}
+        zIndex={-9999}
+      />
 
       {/* <CollisionDebug position={pos} bounds={bounds} /> */}
     </Container>
