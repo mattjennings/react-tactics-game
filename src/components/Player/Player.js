@@ -4,6 +4,7 @@ import useKey from '../../hooks/useKey'
 import usePosition from '../../hooks/usePosition'
 import { useCamera } from '../Camera'
 import usePlayerAnimation from './usePlayerAnimation'
+import { CollisionDebug } from '../debug'
 
 const WALKING_SPEED = 1.8
 
@@ -82,10 +83,9 @@ const Player = ({ startingPosition }) => {
         y={Math.round(pos.y)}
         pivot={bounds.pivot}
         scale={{ x: facing, y: 1 }}
-        zIndex={-9999}
       />
 
-      {/* <CollisionDebug position={pos} bounds={bounds} /> */}
+      {true && <CollisionDebug position={pos} bounds={bounds} />}
     </Container>
   )
 }

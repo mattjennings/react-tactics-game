@@ -8,38 +8,38 @@ const CollisionDebug = ({ position, bounds }) => {
   return (
     <Container>
       <Rectangle
-        x={collisionBounds.left}
-        y={collisionBounds.top}
-        width={collisionBounds.right - collisionBounds.left}
-        height={collisionBounds.bottom - collisionBounds.top}
+        x={Math.round(collisionBounds.left)}
+        y={Math.round(collisionBounds.top)}
+        width={Math.round(collisionBounds.right - collisionBounds.left)}
+        height={Math.round(collisionBounds.bottom - collisionBounds.top)}
         color={0xff0000}
         outline
       />
       <Text
-        x={collisionBounds.left - 24}
-        y={collisionBounds.top + 4}
-        text={collisionBounds.left}
+        x={Math.round(collisionBounds.left - 24)}
+        y={Math.round(collisionBounds.top + 4)}
+        text={Math.round(collisionBounds.left)}
         fontSize={16}
         style={{ fill: 'red', fontSize: 12 }}
       />
       <Text
-        x={collisionBounds.left + 1}
-        y={collisionBounds.bottom + 4}
-        text={collisionBounds.bottom}
+        x={Math.round(collisionBounds.left + 1)}
+        y={Math.round(collisionBounds.bottom + 4)}
+        text={Math.round(collisionBounds.bottom)}
         fontSize={16}
         style={{ fill: 'red', fontSize: 12 }}
       />
       <Text
-        x={collisionBounds.right + 2}
-        y={collisionBounds.top + 4}
-        text={collisionBounds.right}
+        x={Math.round(collisionBounds.right + 2)}
+        y={Math.round(collisionBounds.top + 4)}
+        text={Math.round(collisionBounds.right)}
         fontSize={16}
         style={{ fill: 'red', fontSize: 12 }}
       />
       <Text
-        x={collisionBounds.left + 1}
-        y={collisionBounds.top - 16}
-        text={collisionBounds.top}
+        x={Math.round(collisionBounds.left + 1)}
+        y={Math.round(collisionBounds.top - 16)}
+        text={Math.round(collisionBounds.top)}
         fontSize={16}
         style={{ fill: 'red', fontSize: 12 }}
       />
