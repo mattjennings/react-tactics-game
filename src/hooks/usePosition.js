@@ -1,36 +1,61 @@
 import { useCallback } from 'react'
 import useSetState from './useSetState'
-import { useApp } from '@inlet/react-pixi'
 import clamp from '../util/clamp'
-
-// The app.stage.width/height seem to expand if you get too close to the edge
-const STAGE_EDGE_BUFFER = 24
+import { useTilemap } from '../components/Tilemap'
+import { useCamera } from '../components/Camera'
 
 /**
  *
  * @param {{ x?: number, y?: number }} startingPosition
- * @param {{ limitBounds?: boolean }} [options]
+ * @param {{ bounds?: { width: number, height: number, pivot: [number, number] }, tileCollision?: boolean, cameraCollision?: boolean }} [options]
  * @returns {[{ x?: number, y?: number }, setPosition]}
  */
-export default function usePosition(startingPosition, { limitBounds }) {
+export default function usePosition(startingPosition, { bounds, tileCollision, cameraCollision } = {}) {
   const [state, setState] = useSetState(startingPosition)
-  const app = useApp()
+  const { checkMove } = useTilemap()
+  const { camera } = useCamera()
 
   const setPosition = useCallback(
-    newPosition => {
-      if (limitBounds) {
-        let clampedPosition = {
-          x: newPosition.x !== undefined ? clamp(0, newPosition.x, app.stage.width - STAGE_EDGE_BUFFER) : undefined,
-          y: newPosition.y !== undefined ? clamp(0, newPosition.y, app.stage.height - STAGE_EDGE_BUFFER) : undefined
-        }
+    position => {
+      let nextPosition = { ...position }
 
-        setState(clampedPosition)
-      } else {
-        setState(newPosition)
+      if (bounds && tileCollision) {
+        const availablePosition = checkMove(state, nextPosition, bounds)
+        nextPosition = { ...availablePosition }
       }
+
+      if (bounds && cameraCollision) {
+        const { pivot = [0, 0] } = bounds
+
+        nextPosition.x =
+          nextPosition.x !== undefined
+            ? clamp(
+                camera.current.corner.x + pivot[0],
+                nextPosition.x,
+                camera.current.corner.x + camera.current.screenWidth - pivot[0]
+              )
+            : undefined
+
+        nextPosition.y =
+          nextPosition.y !== undefined
+            ? clamp(
+                camera.current.corner.y + pivot[1],
+                nextPosition.y,
+                camera.current.corner.y + camera.current.screenHeight - pivot[1]
+              )
+            : undefined
+      }
+
+      if (!bounds && (tileCollision || cameraCollision)) {
+        console.warn('You must provide a `bounds` argument if you want to enable collisions')
+      }
+
+      setState(nextPosition)
+
+      return nextPosition
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [limitBounds, app.stage.width, app.stage.height]
+
+    [checkMove, camera, tileCollision, cameraCollision, bounds, state, setState]
   )
 
   return [state, setPosition]

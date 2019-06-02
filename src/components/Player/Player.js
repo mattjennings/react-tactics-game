@@ -1,13 +1,9 @@
-import { Sprite, useTick, Container, Text } from '@inlet/react-pixi'
+import { Container, Sprite, useTick } from '@inlet/react-pixi'
 import React, { useEffect } from 'react'
 import useKey from '../../hooks/useKey'
-import { useCamera } from '../Camera'
-import { useTilemap } from '../Tilemap'
 import usePosition from '../../hooks/usePosition'
+import { useCamera } from '../Camera'
 import usePlayerAnimation from './usePlayerAnimation'
-import Rectangle from '../Rectangle'
-import getCollisionBounds from '../../util/getCollisionBounds'
-import { CollisionDebug } from '../debug'
 
 const WALKING_SPEED = 2
 
@@ -24,11 +20,10 @@ const Player = ({ startingPosition }) => {
   const upKey = useKey(83) // W
 
   const { moveCamera } = useCamera()
-  const { checkMove } = useTilemap()
 
   const { sprite, setAnimation, facing } = usePlayerAnimation()
 
-  const [pos, setPos] = usePosition(startingPosition, { limitBounds: true })
+  const [pos, setPos] = usePosition(startingPosition, { bounds, tileCollision: true, cameraCollision: true })
 
   // set initial camera position
   useEffect(() => {
@@ -60,14 +55,13 @@ const Player = ({ startingPosition }) => {
     if (velocity.x || velocity.y) {
       // the position that we want to move to before we collision check
       const desiredPos = { x: Math.round(pos.x + velocity.x * delta), y: Math.round(pos.y + velocity.y * delta) }
-      const { x: newX, y: newY } = checkMove(pos, desiredPos, bounds)
 
       // get new direction based on desiredPos (if we walk left and hit a wall, we still want to face left)
       const newFacing = velocity.x ? Math.sign(desiredPos.x - pos.x) : facing
 
       // update position and camera
-      setPos({ x: newX, y: newY })
-      moveCamera({ x: newX, y: newY })
+      const nextPos = setPos(desiredPos)
+      moveCamera(nextPos)
 
       // update animation
       setAnimation('WALK', { frame: 1, facing: newFacing })
@@ -84,7 +78,7 @@ const Player = ({ startingPosition }) => {
     <Container>
       <Sprite texture={sprite} x={pos.x} y={pos.y} pivot={bounds.pivot} scale={{ x: facing, y: 1 }} />
 
-      <CollisionDebug position={pos} bounds={bounds} />
+      {/* <CollisionDebug position={pos} bounds={bounds} /> */}
     </Container>
   )
 }
