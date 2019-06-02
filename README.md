@@ -16,3 +16,6 @@ yarn
 yarn start
 ```
 
+## Credits
+
+Assets used are all from https://bakudas.itch.io/generic-rpg-pack
