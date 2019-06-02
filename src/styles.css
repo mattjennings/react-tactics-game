@@ -4,32 +4,22 @@ body {
 }
 
 #root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100vw;
   height: 100vh;
-  text-align: center;
-  position: relative;
 }
 
 canvas {
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  height: 100%;
+  width: auto;
   image-rendering: pixelated;
-}
-
-@media (orientation: landscape) {
-  canvas {
-    height: 100vh;
-    width: auto;
-  }
 }
 
 @media (orientation: portrait) {
   canvas {
     height: auto;
-    width: 100vw;
+    width: 100%;
   }
 }

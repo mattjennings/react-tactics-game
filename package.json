@@ -5,13 +5,17 @@
   "license": "MIT",
   "dependencies": {
     "@inlet/react-pixi": "^0.5.9",
+    "pixi-sound": "^3.0.2",
     "pixi-tiledmap": "^1.10.0",
     "pixi-viewport": "^3.23.2",
     "pixi.js": "^4.8.7",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-icons": "^3.7.0",
+    "react-ratio": "^0.1.5",
     "react-scripts": "3.0.1",
+    "styled-components": "^4.2.1",
     "tiled-to-pixi": "^1.1.0"
   },
   "scripts": {

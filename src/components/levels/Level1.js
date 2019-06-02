@@ -1,11 +1,20 @@
+import * as PIXI from 'pixi.js'
 import { Text } from '@inlet/react-pixi'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Player from '../Player'
 import Tilemap from '../Tilemap'
 import LoadResources from '../LoadResources'
 import Camera from '../Camera'
+import ps from 'pixi-sound'
 
 export default function Level1() {
+  useEffect(() => {
+    const sound = ps.sound.Sound.from('assets/rpg-pack/soundtrack/Windless Slopes.mp3')
+    sound.play({ loop: true })
+
+    return () => sound.stop()
+  }, [])
+
   return (
     <LoadResources
       resources={['/assets/tilemaps/level1.tmx', '/assets/rpg-pack/chars/gabe/gabe-idle-run.png']}
