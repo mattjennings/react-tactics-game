@@ -1,5 +1,4 @@
 import { PixiComponent } from '@inlet/react-pixi'
-import PropTypes from 'prop-types'
 import * as PIXI from 'pixi.js'
 
 const Rectangle = PixiComponent('Rectangle', {
@@ -20,16 +19,5 @@ const Rectangle = PixiComponent('Rectangle', {
     }
   }
 })
-
-Rectangle.propTypes = {
-  x: PropTypes.number.required,
-  y: PropTypes.number.required,
-  width: PropTypes.number,
-  height: PropTypes.number,
-  color: PropTypes.number,
-  alpha: PropTypes.number,
-  outline: PropTypes.boolean,
-  rotation: PropTypes.number
-}
 
 export default Rectangle

@@ -1,7 +1,7 @@
 import { PixiComponent, useApp } from '@inlet/react-pixi'
 import Viewport from 'pixi-viewport'
 import React, { useRef } from 'react'
-import clamp from '../util/clamp'
+import clamp from '../../util/clamp'
 
 const CameraComponent = PixiComponent('Camera', {
   create: props => {
