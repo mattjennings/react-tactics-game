@@ -13,7 +13,6 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-icons": "^3.7.0",
-    "react-ratio": "^0.1.5",
     "react-scripts": "3.0.1",
     "styled-components": "^4.2.1",
     "tiled-to-pixi": "^1.1.0"

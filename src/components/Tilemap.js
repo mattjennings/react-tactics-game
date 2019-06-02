@@ -15,7 +15,7 @@ const Tilemap = props => {
   // create tilemap from url
   const tilemap = new PIXI.extras.TiledMap(props.tilemapUrl)
 
-  return <PixiTilemap tilemap={tilemap} />
+  return <PixiTilemap {...props} tilemap={tilemap} />
 }
 
 export default Tilemap

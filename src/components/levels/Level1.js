@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js'
 import { Text } from '@inlet/react-pixi'
 import React, { useEffect } from 'react'
 import Player from '../Player'
@@ -21,8 +20,9 @@ export default function Level1() {
       fallback={<Text text="Loading..." style={{ fill: 'white' }} x={0} y={0} />}
     >
       <Camera x={256} y={256}>
-        <Tilemap tilemapUrl="/assets/tilemaps/level1.tmx" />
-        <Player startingPosition={{ x: 250, y: 250 }} />
+        <Tilemap tilemapUrl="/assets/tilemaps/level1.tmx">
+          <Player startingPosition={{ x: 250, y: 250 }} />
+        </Tilemap>
       </Camera>
     </LoadResources>
   )

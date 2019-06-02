@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import Button from './Button'
-import { FaVolumeUp, FaVolumeDown } from 'react-icons/fa'
 
 const StyledDiv = styled(Button)`
   width: 32px;
