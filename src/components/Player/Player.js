@@ -83,6 +83,10 @@ const Player = ({ startingPosition }) => {
         y={Math.round(pos.y)}
         pivot={bounds.pivot}
         scale={{ x: facing, y: 1 }}
+        interactive
+        pointerdown={() => {
+          console.log('player clicked')
+        }}
       />
 
       {false && <CollisionDebug position={pos} bounds={bounds} />}
